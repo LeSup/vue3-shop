@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './assets/styles/index.css'
 import 'vant/lib/index.css'
 
 import 'lib-flexible/flexible'

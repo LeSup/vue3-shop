@@ -1,0 +1,16 @@
+.flex(@main: flex-start, @cross: center) {
+  display: flex;
+  justify-content: @main;
+  align-items: @cross;
+}
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.square(@width) {
+  width: @width;
+  height: @width;
+}
