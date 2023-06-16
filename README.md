@@ -15,6 +15,6 @@ $ npm run dev
 
 ### 首页
 
-![home1](https://github.com/LeSup/vue3-shop/images/home1.png)
-![home2](https://github.com/LeSup/vue3-shop/images/home2.png)
-![home3](https://github.com/LeSup/vue3-shop/images/home3.png)
+![home1](https://github.com/LeSup/vue3-shop/blob/master/images/home1.png)
+![home2](https://github.com/LeSup/vue3-shop/blob/master/images/home2.png)
+![home3](https://github.com/LeSup/vue3-shop/blob/master/images/home3.png)
