@@ -71,3 +71,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+:root:root {
+  --van-back-top-right: 16px;
+  --van-back-top-bottom: 70px;
+  --van-back-top-text-color: rgba(0, 0, 0, 0.4);
+  --van-back-top-background: rgba(255, 255, 255);
+}

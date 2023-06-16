@@ -5,7 +5,7 @@ import type { ConfigProviderThemeVars } from 'vant'
 
 const themeVars: ConfigProviderThemeVars = {
   tabbarHeight: '55px',
-  tabbarItemActiveColor: 'rgb(207, 10, 44)'
+  tabbarItemActiveColor: 'rgb(207, 10, 44)',
 };
 
 </script>
