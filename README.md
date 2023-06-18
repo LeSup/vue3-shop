@@ -18,3 +18,7 @@ $ npm run dev
 ![home1](https://github.com/LeSup/vue3-shop/blob/master/images/home1.png)
 ![home2](https://github.com/LeSup/vue3-shop/blob/master/images/home2.png)
 ![home3](https://github.com/LeSup/vue3-shop/blob/master/images/home3.png)
+
+### 分类
+
+![category](https://github.com/LeSup/vue3-shop/blob/master/images/category.png)

@@ -4,12 +4,7 @@
       <div class="logo">
         <img src="@/assets/images/logo_white.png" alt="vmall" />
       </div>
-      <div class="search">
-        <div class="icon">
-          <SearchIcon :size="16"></SearchIcon>
-        </div>
-        <div class="text" v-show="state.hotWords.length">{{ state.hotWords[state.currentHotIdx]?.word }}</div>
-      </div>
+      <Search></Search>
       <div class="message">
         <MessageIcon :size="24"></MessageIcon>
       </div>
@@ -26,20 +21,14 @@
     </div>
     <div class="bg">
       <div class="ads">
-        <Swipe class="swipe" :autoplay="3000" indicator-color="white">
-          <SwipeItem v-for="item of state.ads" :key="item.id">
-            <div class="ad-wrapper">
-              <img :src="item.imgUrl" :alt="item.title" />
-            </div>
-          </SwipeItem>
-      </Swipe>
+        <Swiper :data="state.ads"></Swiper>
       </div>
       <div class="grids">
         <div class="container">
           <div class="scroll" ref="scrollRef" @scroll="handleScroll">
             <div class="content">
               <div class="grid-group" v-for="(grids, index) of icon_grids" :key="index">
-                <div class="grid-item" v-for="grid of grids" :key="grid.id">
+                <div class="grid-item" v-for="grid of grids" :key="grid.imgUrl">
                   <img class="image" :src="grid.imgUrl" :alt="grid.title" />
                   <p class="text">{{ grid.title }}</p>
                 </div>
@@ -145,27 +134,24 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, watch, computed, ref, nextTick } from 'vue'
+import { onMounted, reactive, computed, ref, nextTick } from 'vue'
 import { RouterLink } from 'vue-router'
 import { Swipe, SwipeItem, BackTop } from 'vant'
 import Tabbar from '@/components/tabbar/index.vue'
+import Search from '@/components/search/index.vue'
+import Swiper from '@/components/swiper/index.vue'
 import Card from '@/components/card/index.vue'
 import MessageIcon from '@/icons/message.vue'
-import SearchIcon from '@/icons/search.vue'
-import { getHotWords, getHotCategories, getHomeInfos } from '@/service/home'
+import {  getHotCategories, getHomeInfos } from '@/service/home'
 
 const scrollRef = ref<HTMLDivElement>()
 const slideRef = ref<HTMLDivElement>()
 
 const state = reactive<{
   hotCategories: string[];
-  hotWords: API.HotWord[];
-  currentHotIdx: number;
   slideWidth: number;
-} & API.HomeInfos>({
+} & Required<API.HomeInfos>>({
   hotCategories: [],
-  hotWords: [],
-  currentHotIdx: 0,
   ads: [],
   grids: [],
   slideWidth: 0,
@@ -178,7 +164,6 @@ const state = reactive<{
 let slideRatio = 0
 
 onMounted(async () => {
-  state.hotWords = await getHotWords()
   state.hotCategories = await getHotCategories()
 
   const { ads, grids, qualityPrds, phonePrds, computePrds, ipadPrds } = await getHomeInfos()
@@ -205,31 +190,13 @@ const icon_grids = computed(() => {
   ]
 })
 
-let timer: undefined | number = undefined
-watch(() => state.hotWords, (val, old, onCleanup) => {
-  onCleanup(() => {
-    clearInterval(timer)
-  })
-
-  const len = val.length;
-  if (len) {
-    timer = setInterval(() => {
-      if (state.currentHotIdx >= len - 1) {
-        state.currentHotIdx = 0
-      } else {
-        state.currentHotIdx++
-      }
-    }, 5000)
-  }
-})
-
 function handleScroll(e: any) {
   const target = e.target!
   const translateX = 40 * (target.scrollLeft || 0) / (target.scrollWidth || 1)
   slideRef.value!.style.transform = `translate3d(${translateX}px, 0, 0)`
 }
 
-function getPrdPrice(item: Product, type: 'sale' | 'origin'): string {
+function getPrdPrice(item: API.Product, type: 'sale' | 'origin'): string {
   let str = '￥'
   let isSale = type === 'sale'
   str += (isSale ? item.salePrice :item.originPrice) || 0
@@ -251,6 +218,7 @@ function getPrdPrice(item: Product, type: 'sale' | 'origin'): string {
     left: 0;
     right: 0;
     .flex(space-between);
+    gap: 16px;
     height: 58px;
     padding: 0 16px;
     background: url(/uomcdn/CN/cms/202306/227430D9F26863A8D1F432ADF1223895.png) no-repeat 0 0 / 100% auto;
@@ -264,24 +232,6 @@ function getPrdPrice(item: Product, type: 'sale' | 'origin'): string {
         .square(100%);
       }
     }
-    .search {
-      .flex();
-      width: 163px;
-      height: 40px;
-      padding: 0 16px;
-      border-radius: 40px;
-      background: rgba(255, 255, 255);
-      opacity: 0.6;
-      .icon {
-        .square(16px);
-        margin-right: 8px;
-      }
-      .text {
-        flex: 1 1 0%;
-        font-size: 14px;
-        .ellipsis();
-      }
-    }
     .message {
       .square(24px);
     }
@@ -289,7 +239,7 @@ function getPrdPrice(item: Product, type: 'sale' | 'origin'): string {
       font-size: 14px;
       line-height: 18px;
       a {
-        color: rgba(0, 0, 0);
+        color: #FFFFFF;
       }
     }
   }
@@ -313,7 +263,7 @@ function getPrdPrice(item: Product, type: 'sale' | 'origin'): string {
         .text {
           font-size: 12px;
           line-height: 16px;
-          color: rgba(0, 0, 0);
+          color: #FFFFFF;
           opacity: 0.9;
         }
       }
@@ -326,17 +276,6 @@ function getPrdPrice(item: Product, type: 'sale' | 'origin'): string {
   }
   .ads {
     margin-top: 8px;
-    height: calc((100vw - 32px) * 0.425);
-    .ad-wrapper {
-      padding: 0 16px;
-      height: 100%;
-      img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        border-radius: 16px;
-      }
-    }
   }
 
   .grids {
@@ -367,8 +306,7 @@ function getPrdPrice(item: Product, type: 'sale' | 'origin'): string {
                 font-size: 12px;
                 color: rgba(255, 255, 255);
                 text-align: center;
-                .ellipsis();
-                -webkit-line-clamp: 2;
+                .line-clamp();
               }
             }
 

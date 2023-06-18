@@ -6,6 +6,11 @@ import type { ConfigProviderThemeVars } from 'vant'
 const themeVars: ConfigProviderThemeVars = {
   tabbarHeight: '55px',
   tabbarItemActiveColor: 'rgb(207, 10, 44)',
+  sidebarBackground: 'rgb(241, 243, 245)',
+  sidebarSelectedBackground: 'rgb(241, 243, 245)',
+  sidebarSelectedTextColor: 'rgb(207, 10, 44)',
+  sidebarSelectedBorderWidth: '2px',
+  sidebarSelectedBorderColor: 'rgb(207, 10, 44)'
 };
 
 </script>

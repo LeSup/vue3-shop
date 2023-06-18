@@ -17,18 +17,17 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     proxy: {
-      '/api': {
+      '/mcp': {
         target: 'https://openapi.vmall.com',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, '')
+        changeOrigin: true
       },
       '/cmscdn': {
         target: 'https://res.vmallres.com',
-        changeOrigin: true,
+        changeOrigin: true
       },
       '/uomcdn': {
         target: 'https://res6.vmallres.com/pimages',
-        changeOrigin: true,
+        changeOrigin: true
       }
     }
   },

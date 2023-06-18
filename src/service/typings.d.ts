@@ -5,11 +5,9 @@ declare namespace API {
     id: number;
   };
 
-  type ImgInfo = {
-    id: number;
+  type Img = {
     imgUrl: string;
     title: string;
-    bgColor: string;
   }
 
   type ActivityPromInfo = {
@@ -32,11 +30,39 @@ declare namespace API {
   }
 
   type HomeInfos = {
-    ads?: ImgInfo[];
-    grids?: ImgInfo[];
+    ads?: Img[];
+    grids?: Img[];
     qualityPrds?: Product[];
     phonePrds?: Product[];
     computePrds?: Product[];
     ipadPrds?: Product[];
+  }
+
+  type CategoryConfigInfoDataSource = {
+    dataSourceCode: string;
+    dataSourceType: string;
+  }
+
+  type CategoryConfigInfo = {
+    sceneCode: string;
+    sceneName: string;
+    dataSourceList: CategoryConfigInfoDataSource[];
+  }
+
+  type Category = {
+    categoryId: number;
+    categoryName: string;
+    dataSourceCode: string;
+    configInfo: CategoryConfigInfo;
+    subCategoryList: Category[];
+  }
+
+  type AdImg = {
+    adTitle: string;
+    adImgUrl: string;
+  }
+
+  type DataMap = {
+    [name: string]: Product[] | AdImg[]
   }
 }
