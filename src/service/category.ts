@@ -1,29 +1,24 @@
 import { get } from '@/utils/request'
+import { getPageInfo } from './common'
 
 const Code = '0'
 
 export async function getCategories(): API.Category[] {
-  const { code, pageInfos } = await get('/mcp/content/getPageInfoListAsync', {
-    pageId: 103040874
-  })
+  const pageInfos = await getPageInfo(103040874)
 
-  if (code === Code) {
-    const dataInfos = pageInfos?.[0]?.cards?.[0]?.dataSourceList?.[0]?.categories?.dataInfos || []
-    return dataInfos.map(item => {
-      return ({
-        ...item,
-        configInfo: JSON.parse(item.configInfo),
-        subCategoryList: item.subCategoryList?.map(i => {
-          return ({
-            ...i,
-            configInfo: JSON.parse(i.configInfo),
-          })
+  const dataInfos = pageInfos?.[0]?.cards?.[0]?.dataSourceList?.[0]?.categories?.dataInfos || []
+  return dataInfos.map(item => {
+    return ({
+      ...item,
+      configInfo: JSON.parse(item.configInfo),
+      subCategoryList: item.subCategoryList?.map(i => {
+        return ({
+          ...i,
+          configInfo: JSON.parse(i.configInfo),
         })
       })
     })
-  }
-
-  return []
+  })
 }
 
 async function getDataMap(dataSourceList: string[]): API.DataMap {

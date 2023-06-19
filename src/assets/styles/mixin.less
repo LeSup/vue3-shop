@@ -15,6 +15,14 @@
   height: @width;
 }
 
+.square-img(@width) {
+  .square(@width);
+  img {
+    display: block;
+    .square(100%);
+  }
+}
+
 .line-clamp(@line: 2) {
   display: -webkit-box;
   -webkit-box-orient: vertical;

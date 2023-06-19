@@ -24,23 +24,7 @@
         <Swiper :data="state.ads"></Swiper>
       </div>
       <div class="grids">
-        <div class="container">
-          <div class="scroll" ref="scrollRef" @scroll="handleScroll">
-            <div class="content">
-              <div class="grid-group" v-for="(grids, index) of icon_grids" :key="index">
-                <div class="grid-item" v-for="grid of grids" :key="grid.imgUrl">
-                  <img class="image" :src="grid.imgUrl" :alt="grid.title" />
-                  <p class="text">{{ grid.title }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="slider">
-            <div class="slide" ref="slideRef" :style="{width: `${state.slideWidth}px`}"></div>
-          </div>
-        </div>
+        <SliderCard :data="state.grids"></SliderCard>
       </div>
     </div>
     <div class="grandCeremony">
@@ -134,18 +118,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, computed, ref, nextTick } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { RouterLink } from 'vue-router'
 import { Swipe, SwipeItem, BackTop } from 'vant'
 import Tabbar from '@/components/tabbar/index.vue'
 import Search from '@/components/search/index.vue'
 import Swiper from '@/components/swiper/index.vue'
+import SliderCard from '@/components/sliderCard/index.vue'
 import Card from '@/components/card/index.vue'
 import MessageIcon from '@/icons/message.vue'
 import {  getHotCategories, getHomeInfos } from '@/service/home'
-
-const scrollRef = ref<HTMLDivElement>()
-const slideRef = ref<HTMLDivElement>()
 
 const state = reactive<{
   hotCategories: string[];
@@ -161,8 +143,6 @@ const state = reactive<{
   ipadPrds: []
 })
 
-let slideRatio = 0
-
 onMounted(async () => {
   state.hotCategories = await getHotCategories()
 
@@ -173,28 +153,7 @@ onMounted(async () => {
   state.phonePrds = phonePrds?.slice(0, 4) || []
   state.computePrds = computePrds?.slice(0, 2) || []
   state.ipadPrds = ipadPrds?.slice(0, 2) || []
-
-  nextTick(() => {
-    const scrollVal = scrollRef.value;
-    slideRatio = (scrollVal?.clientWidth || 0) / (scrollVal?.children?.[0]?.clientWidth || 1)
-    state.slideWidth = slideRatio * 40
-  })
 })
-
-const icon_grids = computed(() => {
-  const grids = state.grids
-  const len = Math.ceil(grids.length / 2)
-  return [
-    grids.slice(0, len),
-    grids.slice(len)
-  ]
-})
-
-function handleScroll(e: any) {
-  const target = e.target!
-  const translateX = 40 * (target.scrollLeft || 0) / (target.scrollWidth || 1)
-  slideRef.value!.style.transform = `translate3d(${translateX}px, 0, 0)`
-}
 
 function getPrdPrice(item: API.Product, type: 'sale' | 'origin'): string {
   let str = '￥'
@@ -281,54 +240,6 @@ function getPrdPrice(item: API.Product, type: 'sale' | 'origin'): string {
   .grids {
     margin-top: 8px;
     padding: 0 16px;
-    .container {
-      overflow: hidden;
-      .scroll {
-        overflow-y: hidden;
-        overflow-x: auto;
-        &::-webkit-scrollbar {
-          display: none;
-        }
-        .content {
-          width: max-content;
-          .grid-group {
-            .flex();
-            width: max-content;
-            .grid-item {
-              .flex(center);
-              flex-direction: column;
-              .image {
-                .square(48px);
-              }
-              .text {
-                margin: 4px 0;
-                width: calc((100vw - 32px) / 5);
-                font-size: 12px;
-                color: rgba(255, 255, 255);
-                text-align: center;
-                .line-clamp();
-              }
-            }
-
-            &:first-child {
-              margin-bottom: 8px;
-            }
-          }
-        }
-      }
-    }
-    .slider {
-      margin: 6px auto;
-      width: 40PX;
-      height: 4PX;
-      border-radius: 3PX;
-      background-color: rgba(0, 0, 0, 0.2);
-      .slide {
-        height: 4PX;
-        border-radius: 3PX;
-        background-color: rgba(255, 255, 255);
-      }
-    }
   }
 
   .grandCeremony {

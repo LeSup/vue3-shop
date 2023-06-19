@@ -63,6 +63,11 @@ declare namespace API {
   }
 
   type DataMap = {
-    [name: string]: Product[] | AdImg[]
+    [name: string]: Product[] | AdImg[];
+  }
+
+  type MineInfo = {
+    promotions?: API.Img[];
+    tools?: API.Img[];
   }
 }
